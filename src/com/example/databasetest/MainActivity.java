@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.model.HooMsgBean;
-import com.example.utils.DataBaseUtil;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -64,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
 			super.onStart();
 			Toast.makeText(getActivity(), "haha", Toast.LENGTH_SHORT).show();
 			HooMsgBean bean = new HooMsgBean();
-			DataBaseUtil.iniClass(bean.getClass());
+			// ClassUtil.iniClass(bean.getClass());
 
 		}
 

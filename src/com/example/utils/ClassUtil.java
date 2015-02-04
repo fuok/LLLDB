@@ -9,7 +9,7 @@ import java.util.Map;
 
 import android.util.Log;
 
-public class DataBaseUtil {
+public class ClassUtil {
 
 	/**
 	 * 
@@ -24,9 +24,7 @@ public class DataBaseUtil {
 
 		Map<String, Class> map = getClassFields(clazz, false);
 
-		for (Object key : map.keySet())
-
-		{
+		for (Object key : map.keySet()) {
 
 			Log.w("liuy", "<field=" + key.toString() + "> <Type=" + map.get(key) + ">");
 
@@ -36,9 +34,7 @@ public class DataBaseUtil {
 
 		List<Method> methods = getMothds(clazz, false);
 
-		for (Method method : methods)
-
-		{
+		for (Method method : methods) {
 
 			Log.w("liuy", method.getName());
 
@@ -63,19 +59,15 @@ public class DataBaseUtil {
 	 */
 
 	@SuppressWarnings("rawtypes")
-	public static Map<String, Class> getClassFields(Class clazz, boolean includeParentClass)
-
-	{
+	public static Map<String, Class> getClassFields(Class clazz, boolean includeParentClass) {
 
 		Map<String, Class> map = new HashMap<String, Class>();
 
 		Field[] fields = clazz.getDeclaredFields();
 
-		for (Field field : fields)
+		for (Field field : fields) {
 
-		{
-
-			map.put(clazz.getName() + "." + field.getName(), field.getType());
+			map.put(clazz.getName() + "." + field.getName(), field.getType());// field.getType()
 
 		}
 
@@ -102,23 +94,17 @@ public class DataBaseUtil {
 	 * @return 类名.属性名=属性类型
 	 */
 	@SuppressWarnings("rawtypes")
-	private static Map<String, Class> getParentClassFields(Map<String, Class> map, Class clazz)
-
-	{
+	private static Map<String, Class> getParentClassFields(Map<String, Class> map, Class clazz) {
 
 		Field[] fields = clazz.getDeclaredFields();
 
-		for (Field field : fields)
-
-		{
+		for (Field field : fields) {
 
 			map.put(clazz.getName() + "." + field.getName(), field.getType());
 
 		}
 
-		if (clazz.getSuperclass() == null)
-
-		{
+		if (clazz.getSuperclass() == null) {
 
 			return map;
 
@@ -145,25 +131,19 @@ public class DataBaseUtil {
 	 * @return List
 	 */
 	@SuppressWarnings("rawtypes")
-	public static List<Method> getMothds(Class clazz, boolean includeParentClass)
-
-	{
+	public static List<Method> getMothds(Class clazz, boolean includeParentClass) {
 
 		List<Method> list = new ArrayList<Method>();
 
 		Method[] methods = clazz.getDeclaredMethods();
 
-		for (Method method : methods)
-
-		{
+		for (Method method : methods) {
 
 			list.add(method);
 
 		}
 
-		if (includeParentClass)
-
-		{
+		if (includeParentClass) {
 
 			getParentClassMothds(list, clazz.getSuperclass());
 
@@ -188,23 +168,17 @@ public class DataBaseUtil {
 	 * @return List
 	 */
 	@SuppressWarnings("rawtypes")
-	private static List<Method> getParentClassMothds(List<Method> list, Class clazz)
-
-	{
+	private static List<Method> getParentClassMothds(List<Method> list, Class clazz) {
 
 		Method[] methods = clazz.getDeclaredMethods();
 
-		for (Method method : methods)
-
-		{
+		for (Method method : methods) {
 
 			list.add(method);
 
 		}
 
-		if (clazz.getSuperclass() == Object.class)
-
-		{
+		if (clazz.getSuperclass() == Object.class) {
 
 			return list;
 
