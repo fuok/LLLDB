@@ -11,14 +11,68 @@ import android.util.Log;
 
 public class ClassUtil {
 
+	@SuppressWarnings("rawtypes")
+	public static void saveObj2List(Object object) {
+
+		// iniClass(object.getClass());
+
+		Class clazz = object.getClass();
+		List<HashMap<String, ?>> list = new ArrayList<HashMap<String, ?>>();
+		Field[] fields = clazz.getDeclaredFields();
+
+		for (Field field : fields) {
+
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("fieldName", field.getName());// clazz.getName()
+			map.put("fieldType", field.getType().toString());
+
+			try {
+				Method m = (Method) object.getClass().getMethod("get" + getMethodName(field.getName()));
+				Log.w("liuy", "获取方法：" + "get" + getMethodName(field.getName()));
+				if (field.getGenericType().toString().equals("int")) {
+					// Log.e("liuy", "触发了");
+					int val = (Integer) m.invoke(object);
+					map.put("fieldValue", val);
+				} else if (field.getGenericType().toString().equals("long")) {
+					long val = (Long) m.invoke(object);
+					map.put("fieldValue", val);
+				} else if (field.getGenericType().toString().equals("double")) {
+					double val = (Double) m.invoke(object);
+					map.put("fieldValue", val);
+				} else if (field.getGenericType().toString().equals("boolean")) {
+					boolean val = (Boolean) m.invoke(object);
+					map.put("fieldValue", val);
+				} else if (field.getGenericType().toString().equals("class java.lang.String")) {
+					String val = (String) m.invoke(object);
+					map.put("fieldValue", val);
+				} else if (field.getGenericType().toString().equals("class java.util.ArrayList")) {
+					ArrayList val = (ArrayList) m.invoke(object);
+					map.put("fieldValue", val);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			Log.w("liuy", "属性名：" + map.get("fieldName") + "属性类型:" + map.get("fieldType") + ",属性值：" + map.get("fieldValue"));
+			list.add(map);
+		}
+
+	}
+
+	private static String getMethodName(String fildeName) throws Exception {
+		byte[] items = fildeName.getBytes();
+		items[0] = (byte) ((char) items[0] - 'a' + 'A');
+		return new String(items);
+	}
+
 	/**
 	 * 
-	 * 测试
+	 * 测试方法
 	 * 
 	 * @param args
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void iniClass(Class clazz) {
+	private static void iniClass(Class clazz) {
 
 		// 获取属性
 
@@ -59,7 +113,7 @@ public class ClassUtil {
 	 */
 
 	@SuppressWarnings("rawtypes")
-	public static Map<String, Class> getClassFields(Class clazz, boolean includeParentClass) {
+	private static Map<String, Class> getClassFields(Class clazz, boolean includeParentClass) {
 
 		Map<String, Class> map = new HashMap<String, Class>();
 
@@ -131,7 +185,7 @@ public class ClassUtil {
 	 * @return List
 	 */
 	@SuppressWarnings("rawtypes")
-	public static List<Method> getMothds(Class clazz, boolean includeParentClass) {
+	private static List<Method> getMothds(Class clazz, boolean includeParentClass) {
 
 		List<Method> list = new ArrayList<Method>();
 

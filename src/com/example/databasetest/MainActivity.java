@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.model.HooMsgBean;
+import com.example.utils.ClassUtil;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -62,9 +63,13 @@ public class MainActivity extends ActionBarActivity {
 		public void onStart() {
 			super.onStart();
 			Toast.makeText(getActivity(), "haha", Toast.LENGTH_SHORT).show();
+			//
 			HooMsgBean bean = new HooMsgBean();
-			// ClassUtil.iniClass(bean.getClass());
+			bean.setReceiveId("哈哈哈哈哈哈");
+			bean.setMsgId(1234567890123456L);
 
+			//
+			ClassUtil.saveObj2List(bean);
 		}
 
 	}
