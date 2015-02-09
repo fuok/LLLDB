@@ -12,7 +12,7 @@ import android.util.Log;
 public class ClassUtil {
 
 	@SuppressWarnings("rawtypes")
-	public static void saveObj2List(Object object) {
+	public static List<HashMap<String, ?>> saveObj2List(Object object) {
 
 		// iniClass(object.getClass());
 
@@ -21,14 +21,24 @@ public class ClassUtil {
 		Field[] fields = clazz.getDeclaredFields();
 
 		for (Field field : fields) {
-
+			// 声明保存每个属性的map
 			HashMap<String, Object> map = new HashMap<String, Object>();
+			// 保存属性名，同时也就是表中的列名
 			map.put("fieldName", field.getName());// clazz.getName()
-			map.put("fieldType", field.getType().toString());
-
+			// 保存属性类型，用于匹配SOL语法
+			String type = field.getType().toString();
+			if (type.equals("int") || type.equals("long")) {// 数字型
+				map.put("fieldType", "integer");
+			} else if (type.equals("class java.lang.String")) {// 字符型
+				map.put("fieldType", "text");
+			} else {// 目前处理不了的，以下待补充
+				map.put("fieldType", "text");
+			}
+			// 保存属性值
 			try {
 				Method m = (Method) object.getClass().getMethod("get" + getMethodName(field.getName()));
-				Log.w("liuy", "获取方法：" + "get" + getMethodName(field.getName()));
+				// Log.w("liuy", "获取方法：" + "get" +
+				// getMethodName(field.getName()));
 				if (field.getGenericType().toString().equals("int")) {
 					// Log.e("liuy", "触发了");
 					int val = (Integer) m.invoke(object);
@@ -53,16 +63,24 @@ public class ClassUtil {
 				e.printStackTrace();
 			}
 
-			Log.w("liuy", "属性名：" + map.get("fieldName") + "属性类型:" + map.get("fieldType") + ",属性值：" + map.get("fieldValue"));
+			// 保存完毕，添加至属性队列
+			// Log.w("liuy", "属性名：" + map.get("fieldName") + "属性类型:" +
+			// map.get("fieldType") + ",属性值：" + map.get("fieldValue"));
 			list.add(map);
 		}
-
+		return list;
 	}
 
 	private static String getMethodName(String fildeName) throws Exception {
 		byte[] items = fildeName.getBytes();
 		items[0] = (byte) ((char) items[0] - 'a' + 'A');
 		return new String(items);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static String getObjClassName(Object object) {
+		Class clazz = object.getClass();
+		return clazz.getName();
 	}
 
 	/**

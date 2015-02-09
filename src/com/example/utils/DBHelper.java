@@ -1,5 +1,10 @@
 package com.example.utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -67,6 +72,30 @@ public class DBHelper {
 
 	}
 
+	public static final void createTable(Object object) {
+		List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(object);
+		ArrayList<String> tempList = new ArrayList<String>();
+		for (HashMap<String, ?> map : fieldList) {
+			String name = (String) map.get("fieldName");
+			tempList.add(name);
+			String type = (String) map.get("fieldType");
+			tempList.add(type);
+		}
+		String fieldName[] = tempList.toArray(new String[fieldList.size() * 2]);
+		Log.w("liuy", Arrays.toString(fieldName));
+
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("create table if not exists " + TABLE_NAME + "(" + BLACK_ID + " integer primary key," + BLACK_NUMBER + " text," + BLOCK_SMS + " boolean," + BLOCK_PHONE_CALL + " boolean)");
+		execSQL(buffer.toString());
+
+		// buffer.append("create table if not exists ").append(TABLE_NAME).append("(");
+		// buffer.append(UID).append(" long primary key,");
+		// buffer.append(UNMAE).append(" text,");
+		// buffer.append(UDATA).append(" text").append(")");
+		// return buffer.toString();
+
+	}
+
 	/** ����ݿ� */
 	public DBHelper open() throws SQLException {
 		dataBaseHelper = new DataBaseHelper(mCtx);
@@ -116,9 +145,11 @@ public class DBHelper {
 	 * @param table
 	 *            the table to update in
 	 * @param values
-	 *            a map from column names to new column values. null is a valid value that will be translated to NULL.
+	 *            a map from column names to new column values. null is a valid
+	 *            value that will be translated to NULL.
 	 * @param whereClause
-	 *            the optional WHERE clause to apply when updating. Passing null will update all rows.
+	 *            the optional WHERE clause to apply when updating. Passing null
+	 *            will update all rows.
 	 * @param whereArgs
 	 *            ���updateCondition����"?"�����ô�������ֵ�滻
 	 * @return the number of rows affected
@@ -134,19 +165,34 @@ public class DBHelper {
 	 * @param tableName
 	 *            �����,The table name to compile the query against.
 	 * @param columns
-	 *            ���������,A list of which columns to return. Passing null will return all columns, which is discouraged to prevent reading data from storage that isn't going to be used.
+	 *            ���������,A list of which columns to return. Passing null will
+	 *            return all columns, which is discouraged to prevent reading
+	 *            data from storage that isn't going to be used.
 	 * @param selection
-	 *            �����־䣬�൱��where,A filter declaring which rows to return, formatted as an SQL WHERE clause (excluding the WHERE itself). Passing null will return all rows for the given table.
+	 *            �����־䣬�൱��where,A filter declaring which rows to return,
+	 *            formatted as an SQL WHERE clause (excluding the WHERE itself).
+	 *            Passing null will return all rows for the given table.
 	 * @param selectionArgs
-	 *            �����־䣬��������,You may include ?s in selection, which will be replaced by the values from selectionArgs, in order that they appear in the selection. The values will be bound as Strings.
+	 *            �����־䣬��������,You may include ?s in selection, which will be
+	 *            replaced by the values from selectionArgs, in order that they
+	 *            appear in the selection. The values will be bound as Strings.
 	 * @param groupBy
-	 *            ������,A filter declaring how to group rows, formatted as an SQL GROUP BY clause (excluding the GROUP BY itself). Passing null will cause the rows to not be grouped.
+	 *            ������,A filter declaring how to group rows, formatted as an
+	 *            SQL GROUP BY clause (excluding the GROUP BY itself). Passing
+	 *            null will cause the rows to not be grouped.
 	 * @param having
-	 *            ��������,A filter declare which row groups to include in the cursor, if row grouping is being used, formatted as an SQL HAVING clause (excluding the HAVING itself). Passing null will cause all row groups to be included, and is required when row grouping is not being used.
+	 *            ��������,A filter declare which row groups to include in the
+	 *            cursor, if row grouping is being used, formatted as an SQL
+	 *            HAVING clause (excluding the HAVING itself). Passing null will
+	 *            cause all row groups to be included, and is required when row
+	 *            grouping is not being used.
 	 * @param orderBy
-	 *            ������,How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort order, which may be unordered.
+	 *            ������,How to order the rows, formatted as an SQL ORDER BY
+	 *            clause (excluding the ORDER BY itself). Passing null will use
+	 *            the default sort order, which may be unordered.
 	 */
-	public Cursor findList(String tableName, String[] columns,// ////////////////// 7������
+	public Cursor findList(String tableName, String[] columns,// //////////////////
+																// 7������
 			String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
 		Cursor cursor = db.query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy);
 		return cursor;
@@ -174,7 +220,8 @@ public class DBHelper {
 	 * @param limit
 	 *            ��ҳ��ѯ����
 	 */
-	public Cursor findInfo(boolean distinct, String tableName, String[] columns,// ///////////////// 9������
+	public Cursor findInfo(boolean distinct, String tableName, String[] columns,// /////////////////
+																				// 9������
 			String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) throws SQLException {
 		Cursor cursor = db.query(distinct, tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
 		if (cursor != null) {
@@ -184,7 +231,7 @@ public class DBHelper {
 	}
 
 	/** ִ��SQL */
-	public void execSQL(String sql) {
+	private static void execSQL(String sql) {
 		db.execSQL(sql);
 	}
 

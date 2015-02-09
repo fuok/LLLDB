@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.model.HooMsgBean;
 import com.example.utils.ClassUtil;
+import com.example.utils.DBHelper;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -69,7 +70,8 @@ public class MainActivity extends ActionBarActivity {
 			bean.setMsgId(1234567890123456L);
 
 			//
-			ClassUtil.saveObj2List(bean);
+			// ClassUtil.saveObj2List(bean);
+			DBHelper.createTable(bean);
 		}
 
 	}
