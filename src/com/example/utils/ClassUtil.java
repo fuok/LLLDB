@@ -80,7 +80,7 @@ public class ClassUtil {
 	@SuppressWarnings("rawtypes")
 	public static String getObjClassName(Object object) {
 		Class clazz = object.getClass();
-		return clazz.getName();
+		return clazz.getName().substring(clazz.getName().lastIndexOf(".")+1);
 	}
 
 	/**
