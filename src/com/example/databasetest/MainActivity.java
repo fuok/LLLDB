@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.model.HooMsgBean;
-import com.example.utils.ClassUtil;
 import com.example.utils.DBHelper;
 
 public class MainActivity extends ActionBarActivity {
@@ -71,6 +70,7 @@ public class MainActivity extends ActionBarActivity {
 
 			//
 			// ClassUtil.saveObj2List(bean);
+			DBHelper.iniDB(getActivity());
 			DBHelper.createTable(bean);
 		}
 
