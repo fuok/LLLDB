@@ -31,8 +31,11 @@ public class DBHelper {
 
 	//
 
-	public static void iniDB(Context context) {
+	public static void iniDB(Context context, Object... object) {
 		new DBHelper(context);
+		for (Object obj : object) {
+			createTable(obj);
+		}
 	}
 
 	public DBHelper(Context context) {
@@ -90,8 +93,9 @@ public class DBHelper {
 		buffer.append(")");
 		Log.w("liuy", buffer.toString());
 
+		open();
 		execSQL(buffer.toString());
-
+		close();
 	}
 
 	/**  */
@@ -109,9 +113,40 @@ public class DBHelper {
 	}
 
 	/** */
-	public long insert(String tableName, ContentValues values) {
-		Log.i(TAG, "��ݿ����");
-		return db.insert(tableName, null, values);
+	public static void insert(Object object) {// TODO,需要重写一份方法，分别对应单个和队列//String tableName, ContentValues values
+		Log.i(TAG, "db_insert");
+
+		String tableName = ClassUtil.getObjClassName(object);// 表名
+		List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(object);
+		ArrayList<String> tempNameList = new ArrayList<String>();
+		ArrayList<String> tempTypeList = new ArrayList<String>();
+		ArrayList<Object> tempValueList = new ArrayList<Object>();
+		for (HashMap<String, ?> map : fieldList) {
+			String name = (String) map.get("fieldName");
+			tempNameList.add(name);
+			String type = (String) map.get("fieldType");
+			tempTypeList.add(type);
+			Object value = map.get("fieldValue");
+			tempValueList.add(value);
+		}
+
+		ContentValues contentValues = new ContentValues();
+
+		for (int i = 0; i < tempNameList.size(); i++) {
+
+			if (tempTypeList.get(i).equals("integer")) {
+				contentValues.put(tempNameList.get(i), (Integer) (tempValueList.get(i)));
+			} else if (tempTypeList.get(i).equals("text")) {
+				contentValues.put(tempNameList.get(i), (String) (tempValueList.get(i)));
+			} else {
+
+			}
+
+		}
+
+		open();
+		db.insert(tableName, null, contentValues);
+		close();
 
 	}
 
@@ -148,9 +183,7 @@ public class DBHelper {
 
 	/** */
 	private static void execSQL(String sql) {
-		open();
 		db.execSQL(sql);
-		close();
 	}
 
 	/** */

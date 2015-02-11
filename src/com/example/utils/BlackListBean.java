@@ -17,7 +17,7 @@ import android.util.Log;
  * 
  * �����SmsBean���ƹ��������������о��Ǳߺ���
  * */
-public class BlackListBean extends UserBean {
+public class BlackListBean {
 	// �����
 	public final static String TABLE_NAME = "blacklist";
 	// �Զ����
@@ -60,7 +60,7 @@ public class BlackListBean extends UserBean {
 
 	// ��ȡ������ݼ���
 	public final List<HashMap<String, Object>> findList(final DBHelper dbHelper) {
-		dbHelper.open();
+		// dbHelper.open();
 		Cursor cursor = dbHelper.findList(TABLE_NAME, new String[] { BLACK_ID, BLACK_NUMBER, BLOCK_SMS, BLOCK_PHONE_CALL }, null, null, null, null, BLACK_ID);// + " desc");//����Ҫ��������
 		List<HashMap<String, Object>> uList = new ArrayList<HashMap<String, Object>>();
 		while (cursor.moveToNext()) {
@@ -72,14 +72,14 @@ public class BlackListBean extends UserBean {
 			uList.add(umap);
 		}
 		cursor.close();
-		dbHelper.close();
+		// dbHelper.close();
 		return uList;
 	}
 
 	/** ����һ������Ƿ���� */
 	public final boolean isRowExist(final DBHelper dbHelper, final String incomeNumber) {
 
-		dbHelper.open();
+		// dbHelper.open();
 		Cursor cursor = dbHelper.findList(TABLE_NAME, new String[] { BLACK_ID, BLACK_NUMBER, BLOCK_SMS, BLOCK_PHONE_CALL }, BLACK_NUMBER + "=?", new String[] { incomeNumber }, null, null, BLACK_ID);// +
 																																																		// " desc");//����Ҫ��������
 
@@ -93,24 +93,24 @@ public class BlackListBean extends UserBean {
 			}
 		}
 		cursor.close();
-		dbHelper.close();
+		// dbHelper.close();
 
 		return hasOrNo;
 	}
 
 	// ����
-	public final long save(final DBHelper dbHelper, ContentValues contentValues) {
-		dbHelper.open();
-		long result = dbHelper.insert(TABLE_NAME, contentValues);
-		dbHelper.close();
-		return result;
-	}
+	// public final long save(final DBHelper dbHelper, ContentValues contentValues) {
+	// dbHelper.open();
+	// long result = dbHelper.insert(TABLE_NAME, contentValues);
+	// dbHelper.close();
+	// return result;
+	// }
 
 	// ɾ��
 	public final boolean remove(final DBHelper dbHelper, String deleteCondition, HashMap<String, Object> map) {
-		dbHelper.open();
+		// dbHelper.open();
 		boolean result = dbHelper.delete(TABLE_NAME, deleteCondition, new String[] { map.get(BLACK_ID).toString() });// ɾ����߼���,ɾ�����������(deleteArgs)�ض���(deleteCondition)
-		dbHelper.close();
+		// dbHelper.close();
 		return result;
 	}
 
@@ -127,7 +127,7 @@ public class BlackListBean extends UserBean {
 
 	public final boolean update(final DBHelper dbHelper, Map<String, Object> oldValue, Object[] newValue) {// ���������ɷ�����һ��,�ϱߵ�Add������ֱ�Ӵ���ContentValues,���޸��������Ǵ���������ת��ContentValues
 																											// �������ַ����û�Ҫ�ٿ�һ��
-		dbHelper.open();
+																											// dbHelper.open();
 		// ������ݿ���޸�����
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(BLACK_NUMBER, (String) newValue[0]);
@@ -135,7 +135,7 @@ public class BlackListBean extends UserBean {
 		contentValues.put(BLOCK_PHONE_CALL, (Boolean) newValue[2]);
 		boolean result = dbHelper.update(TABLE_NAME, contentValues, BLACK_ID + "=?", new String[] { oldValue.get(BLACK_ID)// ��oldValue������Ƭ��������HashMap��,��һ����Ŀ��Ϣ
 				.toString() });
-		dbHelper.close();
+		// dbHelper.close();
 		return result;
 
 	}

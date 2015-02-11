@@ -70,8 +70,9 @@ public class MainActivity extends ActionBarActivity {
 
 			//
 			// ClassUtil.saveObj2List(bean);
-			DBHelper.iniDB(getActivity());
-			DBHelper.createTable(bean);
+			DBHelper.iniDB(getActivity(), bean);// 必须，可以考虑把bean放这里一起inidth,用可变参数
+			DBHelper.insert(bean);
+			// DBHelper.createTable(bean);
 		}
 
 	}
