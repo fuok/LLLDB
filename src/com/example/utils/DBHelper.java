@@ -113,8 +113,9 @@ public class DBHelper {
 	}
 
 	/** */
-	public static void insert(Object object) {// TODO,需要重写一份方法，分别对应单个和队列//String tableName, ContentValues values
+	public static void insert(Object object) {
 		Log.i(TAG, "db_insert");
+		open();
 
 		String tableName = ClassUtil.getObjClassName(object);// 表名
 		List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(object);
@@ -134,8 +135,10 @@ public class DBHelper {
 
 		for (int i = 0; i < tempNameList.size(); i++) {
 
-			if (tempTypeList.get(i).equals("integer")) {
+			if (tempTypeList.get(i).equals("smallint")) {
 				contentValues.put(tempNameList.get(i), (Integer) (tempValueList.get(i)));
+			} else if (tempTypeList.get(i).equals("integer")) {
+				contentValues.put(tempNameList.get(i), (Long) (tempValueList.get(i)));
 			} else if (tempTypeList.get(i).equals("text")) {
 				contentValues.put(tempNameList.get(i), (String) (tempValueList.get(i)));
 			} else {
@@ -143,9 +146,50 @@ public class DBHelper {
 			}
 
 		}
-
-		open();
 		db.insert(tableName, null, contentValues);
+		
+		close();
+
+	}
+
+	public static void insert(ArrayList<Object> list) {
+		Log.i(TAG, "db_insert");
+		open();
+
+		for (int i = 0; i < list.size(); i++) {
+
+			String tableName = ClassUtil.getObjClassName(list.get(i));// 表名
+			List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(list.get(i));
+			ArrayList<String> tempNameList = new ArrayList<String>();
+			ArrayList<String> tempTypeList = new ArrayList<String>();
+			ArrayList<Object> tempValueList = new ArrayList<Object>();
+			for (HashMap<String, ?> map : fieldList) {
+				String name = (String) map.get("fieldName");
+				tempNameList.add(name);
+				String type = (String) map.get("fieldType");
+				tempTypeList.add(type);
+				Object value = map.get("fieldValue");
+				tempValueList.add(value);
+			}
+
+			ContentValues contentValues = new ContentValues();
+
+			for (int j = 0; j < tempNameList.size(); j++) {
+
+				if (tempTypeList.get(j).equals("smallint")) {
+					contentValues.put(tempNameList.get(j), (Integer) (tempValueList.get(j)));
+				} else if (tempTypeList.get(j).equals("integer")) {
+					contentValues.put(tempNameList.get(j), (Long) (tempValueList.get(j)));
+				} else if (tempTypeList.get(j).equals("text")) {
+					contentValues.put(tempNameList.get(j), (String) (tempValueList.get(j)));
+				} else {
+
+				}
+
+			}
+			db.insert(tableName, null, contentValues);
+		}
+
 		close();
 
 	}

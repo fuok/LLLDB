@@ -27,7 +27,9 @@ public class ClassUtil {
 			map.put("fieldName", field.getName());// clazz.getName()
 			// 保存属性类型，用于匹配SOL语法
 			String type = field.getType().toString();
-			if (type.equals("int") || type.equals("long")) {// 数字型
+			if (type.equals("int")) {// 数字型
+				map.put("fieldType", "smallint");
+			} else if (type.equals("long")) {
 				map.put("fieldType", "integer");
 			} else if (type.equals("class java.lang.String")) {// 字符型
 				map.put("fieldType", "text");
@@ -80,7 +82,7 @@ public class ClassUtil {
 	@SuppressWarnings("rawtypes")
 	public static String getObjClassName(Object object) {
 		Class clazz = object.getClass();
-		return clazz.getName().substring(clazz.getName().lastIndexOf(".")+1);
+		return clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1);
 	}
 
 	/**
