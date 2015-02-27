@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.model.HooMsgBean;
 import com.example.utils.DBHelper;
-
+//呵呵
 public class MainActivity extends ActionBarActivity {
 
 	@Override
