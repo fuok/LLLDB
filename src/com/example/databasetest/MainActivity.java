@@ -1,5 +1,7 @@
 package com.example.databasetest;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -64,14 +66,19 @@ public class MainActivity extends ActionBarActivity {
 			super.onStart();
 			Toast.makeText(getActivity(), "haha", Toast.LENGTH_SHORT).show();
 			//
-			HooMsgBean bean = new HooMsgBean();
-			bean.setReceiveId("哈哈哈哈哈哈");
-			bean.setMsgId(1234567890123456L);
-
+			HooMsgBean bean1 = new HooMsgBean();
+			bean1.setReceiveId("哈哈哈哈哈哈");
+			bean1.setMsgId(1234567890123456L);
+			HooMsgBean bean2 = new HooMsgBean();
+			bean2.setReceiveId("呵呵呵呵");
+			bean2.setMsgId(1345);
+			ArrayList<HooMsgBean> arrayList = new ArrayList<>();
+			arrayList.add(bean1);
+			arrayList.add(bean2);
 			//
 			// ClassUtil.saveObj2List(bean);
-			DBHelper.iniDB(getActivity(), bean);// 必须，可以考虑把bean放这里一起inidth,用可变参数
-			DBHelper.insert(bean);
+			DBHelper.iniDB(getActivity(), bean1);// 必须，可以考虑把bean放这里一起inidth,用可变参数
+			DBHelper.insert(arrayList);
 			// DBHelper.createTable(bean);
 		}
 
