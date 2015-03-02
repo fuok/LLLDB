@@ -113,8 +113,13 @@ public class DBHelper {
 	}
 
 	/** 插入表数据 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void insert(Object object) {
 		Log.i(TAG, "db_insert");
+		if (object.getClass().getCanonicalName().equals("java.util.ArrayList")) {// 如果是ArrayList，则需要使用相应方法
+			insertArray((ArrayList) object);
+			return;
+		}
 		open();
 
 		String tableName = ClassUtil.getObjClassName(object);// 表名
@@ -146,14 +151,16 @@ public class DBHelper {
 			}
 
 		}
-		db.insert(tableName, null, contentValues);
-
+		long p = db.insert(tableName, null, contentValues);
+		if (p < 0) {
+			Log.w("liuy", "添加失败");
+		}
 		close();
 
 	}
 
-	/** 重载以上方法 */
-	public static void insert(ArrayList<Object> list) {
+	/** 针对ArrayList */
+	private static void insertArray(ArrayList<Object> list) {
 		Log.i(TAG, "db_insert");
 		open();
 
@@ -188,7 +195,10 @@ public class DBHelper {
 				}
 
 			}
-			db.insert(tableName, null, contentValues);
+			long p = db.insert(tableName, null, contentValues);
+			if (p < 0) {
+				Log.w("liuy", "添加失败");
+			}
 		}
 
 		close();
@@ -212,19 +222,27 @@ public class DBHelper {
 		// return db.delete(tableName, deleteCondition, deleteArgs) > 0;
 	}
 
-	/** */
+	/** 修改 */
 	public boolean update(String table, ContentValues values, String whereClause, String[] whereArgs) {
 		int returnValue = db.update(table, values, whereClause, whereArgs);
 		return returnValue > 0;
 	}
 
-	/** */
-	public Cursor findList(String tableName, String[] columns,// //////////////////
-																// 7������
-			String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
+	/** 查找，7个参数 */
+	public Cursor findList(String tableName, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
 		Cursor cursor = db.query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy);
 		return cursor;
 
+	}
+
+	/** 查找，9个参数 */
+	public Cursor findInfo(boolean distinct, String tableName, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit)
+			throws SQLException {
+		Cursor cursor = db.query(distinct, tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+		if (cursor != null) {
+			cursor.moveToFirst();
+		}
+		return cursor;
 	}
 
 	// ---------------------------------私有区----------------------------------
@@ -232,17 +250,6 @@ public class DBHelper {
 	/** */
 	private static void execSQL(String sql) {
 		db.execSQL(sql);
-	}
-
-	/** */
-	private Cursor findInfo(boolean distinct, String tableName, String[] columns,// /////////////////
-			// 9������
-			String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) throws SQLException {
-		Cursor cursor = db.query(distinct, tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
-		if (cursor != null) {
-			cursor.moveToFirst();
-		}
-		return cursor;
 	}
 
 	/** */

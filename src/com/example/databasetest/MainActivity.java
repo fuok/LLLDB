@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.model.HooMsgBean;
 import com.example.utils.DBHelper;
+
 //呵呵
 public class MainActivity extends ActionBarActivity {
 
@@ -64,7 +65,15 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		public void onStart() {
 			super.onStart();
-			Toast.makeText(getActivity(), "haha", Toast.LENGTH_SHORT).show();
+
+		}
+
+	}
+
+	public void myClick(View view) {
+		switch (view.getId()) {
+		case R.id.btn_create:
+			Toast.makeText(this, "haha", Toast.LENGTH_SHORT).show();
 			//
 			HooMsgBean bean1 = new HooMsgBean();
 			bean1.setReceiveId("哈哈哈哈哈哈");
@@ -77,11 +86,20 @@ public class MainActivity extends ActionBarActivity {
 			arrayList.add(bean2);
 			//
 			// ClassUtil.saveObj2List(bean);
-			DBHelper.iniDB(getActivity(), bean1);// 必须，可以考虑把bean放这里一起inidth,用可变参数
+			DBHelper.iniDB(this, bean1);// 必须，可以考虑把bean放这里一起inidth,用可变参数
 			DBHelper.insert(arrayList);
 			// DBHelper.createTable(bean);
-		}
+			break;
+		case R.id.btn_delete:
+			Toast.makeText(this, "横", Toast.LENGTH_SHORT).show();
+			HooMsgBean bean = new HooMsgBean();
+			DBHelper.delete(bean);
 
+			break;
+		case R.id.btn_find:
+
+			break;
+		}
 	}
 
 }
