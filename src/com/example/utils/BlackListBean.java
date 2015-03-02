@@ -109,9 +109,9 @@ public class BlackListBean {
 	// ɾ��
 	public final boolean remove(final DBHelper dbHelper, String deleteCondition, HashMap<String, Object> map) {
 		// dbHelper.open();
-		boolean result = dbHelper.delete(TABLE_NAME, deleteCondition, new String[] { map.get(BLACK_ID).toString() });// ɾ����߼���,ɾ�����������(deleteArgs)�ض���(deleteCondition)
+		// boolean result = dbHelper.delete(TABLE_NAME, deleteCondition, new String[] { map.get(BLACK_ID).toString() });// ɾ����߼���,ɾ�����������(deleteArgs)�ض���(deleteCondition)
 		// dbHelper.close();
-		return result;
+		return false;
 	}
 
 	/**

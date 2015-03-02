@@ -112,7 +112,7 @@ public class DBHelper {
 		Log.v(TAG, "db_close");
 	}
 
-	/** */
+	/** 插入表数据 */
 	public static void insert(Object object) {
 		Log.i(TAG, "db_insert");
 		open();
@@ -147,11 +147,12 @@ public class DBHelper {
 
 		}
 		db.insert(tableName, null, contentValues);
-		
+
 		close();
 
 	}
 
+	/** 重载以上方法 */
 	public static void insert(ArrayList<Object> list) {
 		Log.i(TAG, "db_insert");
 		open();
@@ -194,9 +195,21 @@ public class DBHelper {
 
 	}
 
-	/** */
-	public boolean delete(String tableName, String deleteCondition, String[] deleteArgs) {
-		return db.delete(tableName, deleteCondition, deleteArgs) > 0;
+	/** 删除表 */
+	public static void delete(Object object) {
+		String tableName = ClassUtil.getObjClassName(object);// 表名
+		open();
+		db.delete(tableName, null, null);
+		close();
+	}
+
+	/** 重载以上方法 */
+	public static void delete(Object object, String deleteCondition, String[] deleteArgs) {
+		String tableName = ClassUtil.getObjClassName(object);// 表名
+		open();
+		db.delete(tableName, deleteCondition, deleteArgs);
+		close();
+		// return db.delete(tableName, deleteCondition, deleteArgs) > 0;
 	}
 
 	/** */
@@ -214,9 +227,16 @@ public class DBHelper {
 
 	}
 
+	// ---------------------------------私有区----------------------------------
+
 	/** */
-	public Cursor findInfo(boolean distinct, String tableName, String[] columns,// /////////////////
-																				// 9������
+	private static void execSQL(String sql) {
+		db.execSQL(sql);
+	}
+
+	/** */
+	private Cursor findInfo(boolean distinct, String tableName, String[] columns,// /////////////////
+			// 9������
 			String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) throws SQLException {
 		Cursor cursor = db.query(distinct, tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
 		if (cursor != null) {
@@ -226,12 +246,7 @@ public class DBHelper {
 	}
 
 	/** */
-	private static void execSQL(String sql) {
-		db.execSQL(sql);
-	}
-
-	/** */
-	public boolean isTableExist(String tableName) {
+	private boolean isTableExist(String tableName) {
 		boolean result = false;
 		if (tableName == null) {
 			return false;
@@ -256,7 +271,7 @@ public class DBHelper {
 	}
 
 	/** */
-	public long getCount(String tableName) {
+	private long getCount(String tableName) {
 		long result = 0;
 		if (tableName == null) {
 			return 0;
@@ -286,7 +301,7 @@ public class DBHelper {
 	/*
 	 * 
 	 */
-	public boolean isColumnExist(String tableName, String columnName) {
+	private boolean isColumnExist(String tableName, String columnName) {
 		boolean result = false;
 		if (tableName == null) {
 			return false;
