@@ -78,6 +78,12 @@ public class MainActivity extends ActionBarActivity {
 			HooMsgBean bean1 = new HooMsgBean();
 			bean1.setReceiveId("哈哈哈哈哈哈");
 			bean1.setMsgId(1234567890123456L);
+			bean1.setGroupId(345.8976);
+			ArrayList<String> urlList = new ArrayList<>();
+			urlList.add("测试数据1");
+			urlList.add("测试数据2");
+			bean1.setUrlList(urlList);
+
 			HooMsgBean bean2 = new HooMsgBean();
 			bean2.setReceiveId("呵呵呵呵");
 			bean2.setMsgId(1345);

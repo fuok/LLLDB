@@ -43,7 +43,7 @@ public class HooMsgBean implements Serializable {
 	// 发送用户Id
 	String senderId;
 	// 消息分组ID(绑定、导流、系统消息为10000)，其它则是发送者ID
-	String groupId;
+	double groupId;
 	// 消息类型
 	// 1用户消息 2请求绑定消息 3推送消息 4导流消息 5系统消息 6绑定确认 7解除绑定确认
 	int msgType;
@@ -60,11 +60,11 @@ public class HooMsgBean implements Serializable {
 		this.urlList = urlList;
 	}
 
-	public String getGroupId() {
+	public double getGroupId() {
 		return groupId;
 	}
 
-	public void setGroupId(String groupId) {
+	public void setGroupId(double groupId) {
 		this.groupId = groupId;
 	}
 
