@@ -1,6 +1,7 @@
 package com.example.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /*
- * Sqlite3��ݿ����������
+ * Sqlite3
  * */
 public class DBHelper {
 
@@ -144,7 +145,11 @@ public class DBHelper {
 				contentValues.put(tempNameList.get(i), (Integer) (tempValueList.get(i)));
 			} else if (tempTypeList.get(i).equals("integer")) {
 				contentValues.put(tempNameList.get(i), (Long) (tempValueList.get(i)));
+			} else if (tempTypeList.get(i).equals("double")) {
+				contentValues.put(tempNameList.get(i), (Double) (tempValueList.get(i)));
 			} else if (tempTypeList.get(i).equals("text")) {
+				contentValues.put(tempNameList.get(i), (String) (tempValueList.get(i)));
+			} else if (tempTypeList.get(i).equals("")) {// ArrayList
 				contentValues.put(tempNameList.get(i), (String) (tempValueList.get(i)));
 			} else {
 
@@ -188,7 +193,11 @@ public class DBHelper {
 					contentValues.put(tempNameList.get(j), (Integer) (tempValueList.get(j)));
 				} else if (tempTypeList.get(j).equals("integer")) {
 					contentValues.put(tempNameList.get(j), (Long) (tempValueList.get(j)));
+				} else if (tempTypeList.get(j).equals("double")) {
+					contentValues.put(tempNameList.get(j), (Double) (tempValueList.get(j)));
 				} else if (tempTypeList.get(j).equals("text")) {
+					contentValues.put(tempNameList.get(j), (String) (tempValueList.get(j)));
+				} else if (tempTypeList.get(j).equals("")) {// ArrayList
 					contentValues.put(tempNameList.get(j), (String) (tempValueList.get(j)));
 				} else {
 
@@ -222,7 +231,65 @@ public class DBHelper {
 		// return db.delete(tableName, deleteCondition, deleteArgs) > 0;
 	}
 
-	/** 修改 */
+	/** 查找内容（改） */
+	public static List<HashMap<String, Object>> lookFor(Object object) {
+		String tableName = ClassUtil.getObjClassName(object);// 表名
+		List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(object);
+		ArrayList<String> tempNameList = new ArrayList<String>();
+		ArrayList<String> tempTypeList = new ArrayList<String>();
+		// ArrayList<Object> tempValueList = new ArrayList<Object>();
+		for (HashMap<String, ?> map : fieldList) {
+			String name = (String) map.get("fieldName");
+			tempNameList.add(name);
+			String type = (String) map.get("fieldType");
+			tempTypeList.add(type);
+			// Object value = map.get("fieldValue");
+			// tempValueList.add(value);
+		}
+		String[] nameArray = tempNameList.toArray(new String[tempNameList.size()]);
+		Log.w("liuy", Arrays.toString(nameArray));
+
+		open();
+		Cursor cursor = db.query(tableName, nameArray, null, null, null, null, nameArray[0]);// + " desc");
+		List<HashMap<String, Object>> uList = new ArrayList<HashMap<String, Object>>();
+		while (cursor.moveToNext()) {
+
+			for (int i = 0; i < tempNameList.size(); i++) {
+
+				HashMap<String, Object> umap = new HashMap<String, Object>();
+
+				if (tempTypeList.get(i).equals("smallint")) {
+					Log.w("liuy", "获取到smallint");
+					umap.put(tempNameList.get(i), cursor.getInt(cursor.getColumnIndex(tempNameList.get(i))));
+				} else if (tempTypeList.get(i).equals("integer")) {
+					Log.w("liuy", "获取到integer");
+					umap.put(tempNameList.get(i), cursor.getLong(cursor.getColumnIndex(tempNameList.get(i))));
+				} else if (tempTypeList.get(i).equals("double")) {
+					Log.w("liuy", "获取到double");
+					umap.put(tempNameList.get(i), cursor.getDouble(cursor.getColumnIndex(tempNameList.get(i))));
+				} else if (tempTypeList.get(i).equals("text")) {
+					Log.w("liuy", "获取到text");
+					umap.put(tempNameList.get(i), cursor.getString(cursor.getColumnIndex(tempNameList.get(i))));
+				} else if (tempTypeList.get(i).equals("")) {
+					Log.w("liuy", "获取到数组");
+					umap.put(tempNameList.get(i), cursor.getString(cursor.getColumnIndex(tempNameList.get(i))));
+				} else {
+					Log.w("liuy", "获取到nothing");
+				}
+				uList.add(umap);
+
+			}
+
+		}
+		cursor.close();
+		close();
+
+		// 类型转换，TODO
+		return uList;// 这个返回值目前是错的，最后要改为List<Object>的形式
+
+	}
+
+	/** 修改,TODO */
 	public boolean update(String table, ContentValues values, String whereClause, String[] whereArgs) {
 		int returnValue = db.update(table, values, whereClause, whereArgs);
 		return returnValue > 0;

@@ -73,7 +73,7 @@ public class MainActivity extends ActionBarActivity {
 	public void myClick(View view) {
 		switch (view.getId()) {
 		case R.id.btn_create:
-			Toast.makeText(this, "haha", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "添加", Toast.LENGTH_SHORT).show();
 			//
 			HooMsgBean bean1 = new HooMsgBean();
 			bean1.setReceiveId("哈哈哈哈哈哈");
@@ -97,13 +97,15 @@ public class MainActivity extends ActionBarActivity {
 			// DBHelper.createTable(bean);
 			break;
 		case R.id.btn_delete:
-			Toast.makeText(this, "横", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
 			HooMsgBean bean = new HooMsgBean();
 			DBHelper.delete(bean);
 
 			break;
 		case R.id.btn_find:
-
+			Toast.makeText(this, "查找", Toast.LENGTH_SHORT).show();
+			HooMsgBean bean3 = new HooMsgBean();
+			DBHelper.lookFor(bean3);
 			break;
 		}
 	}
