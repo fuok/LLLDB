@@ -27,20 +27,22 @@ public class ClassUtil {
 			map.put("fieldName", field.getName());// clazz.getName()
 			// 保存属性类型，用于匹配SOL语法
 			String type = field.getType().toString();
-			if (type.equals("int")) {// 数字型
+			if (type.equals("int")) {// 数字型，短
 				map.put("fieldType", "smallint");
-			} else if (type.equals("long")) {
+			} else if (type.equals("long")) {// 数字型，长
 				map.put("fieldType", "integer");
+			} else if (type.equals("double")) {// 小数
+				map.put("fieldType", "double");
 			} else if (type.equals("class java.lang.String")) {// 字符型
 				map.put("fieldType", "text");
-			} else {// 目前处理不了的，以下待补充
-				map.put("fieldType", "text");
+			} else {// 其他类型包括ArrayList先不填类型，包括目前处理不了的
+				map.put("fieldType", "");
 			}
 			// 保存属性值
 			try {
 				Method m = (Method) object.getClass().getMethod("get" + getMethodName(field.getName()));
-				// Log.w("liuy", "获取方法：" + "get" +
-				// getMethodName(field.getName()));
+				// Log.w("liuy", "获取方法：" + "get" +getMethodName(field.getName()));
+				Log.e("liuy", field.getGenericType().toString());
 				if (field.getGenericType().toString().equals("int")) {
 					// Log.e("liuy", "触发了");
 					int val = (Integer) m.invoke(object);
@@ -57,9 +59,13 @@ public class ClassUtil {
 				} else if (field.getGenericType().toString().equals("class java.lang.String")) {
 					String val = (String) m.invoke(object);
 					map.put("fieldValue", val);
-				} else if (field.getGenericType().toString().equals("class java.util.ArrayList")) {
+				} else if (field.getGenericType().toString().contains("java.util.ArrayList")) {
+					// 如果是ArrayList，保存的时候需要处理一下
+					String typeOfList = field.getGenericType().toString();
+					String typeOfClass = typeOfList.substring(typeOfList.indexOf("<"), typeOfList.lastIndexOf(">") + 1);
 					ArrayList val = (ArrayList) m.invoke(object);
-					map.put("fieldValue", val);
+					map.put("fieldValue", typeOfClass + val.toString());
+					// Log.e("liuy", "这是啥：" + val.toString());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -84,6 +90,8 @@ public class ClassUtil {
 		Class clazz = object.getClass();
 		return clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1);
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * 
