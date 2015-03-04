@@ -1,9 +1,11 @@
 package com.example.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -90,42 +92,41 @@ public class ClassUtil {
 			// Class c = Class.forName(object.getClass().getName());
 			Class clazz = object.getClass();
 
-			
-//			List<Method> methods = getMothds(clazz, false);
-//
-//			for (Method method : methods) {
-//
-//				Log.w("liuy", "注意!!!!!:"+method.getName());
-//
-//			}
-			
-			
-			
-			
-			
 			try {
 				Log.i("liuy", "进来了1");
 				Object mObj = clazz.newInstance();
-				Field[] fields = clazz.getDeclaredFields();
-				for (Field field : fields) {
+				Method[] methods = clazz.getDeclaredMethods();
 
-					try {
-						Log.i("liuy", "进来了2");
-						Log.w("liuy", "函数名：" + "set" + getMethodName(field.getName())+",数据类型："+mObj.getClass().getName());
-						Method m = (Method) mObj.getClass().getMethod("set" + getMethodName(field.getName()));//XXX,怎么回事？？？？？
-						Object value = dataMap.get(field.getName());
-						m.invoke(mObj, value);
+				for (Method method : methods) {
 
-					} catch (NoSuchMethodException e) {
-						e.printStackTrace();
-					} catch (Exception e) {
-						e.printStackTrace();
+					Iterator iter = dataMap.entrySet().iterator();
+					while (iter.hasNext()) {
+						Map.Entry entry = (Map.Entry) iter.next();
+						String key = entry.getKey().toString();
+						Object val = entry.getValue();
+
+						try {
+							if (method.getName().contains(("set") + getMethodName(key))) {
+								System.out.println(method.getName() + "哈哈");
+
+								try {
+									method.invoke(mObj, val);
+								} catch (IllegalAccessException e) {
+									e.printStackTrace();
+								} catch (IllegalArgumentException e) {
+									e.printStackTrace();
+								} catch (InvocationTargetException e) {
+									e.printStackTrace();
+								}
+
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
 					}
 
 				}
-				// Log.i("liuy", "实例名："+mObj.getClass().getName());
-
-				// 遍历obj域，依次invok
 
 				finalList.add(mObj);
 			} catch (InstantiationException e) {
