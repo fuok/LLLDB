@@ -42,7 +42,7 @@ public class ClassUtil {
 			try {
 				Method m = (Method) object.getClass().getMethod("get" + getMethodName(field.getName()));
 				// Log.w("liuy", "获取方法：" + "get" +getMethodName(field.getName()));
-				Log.e("liuy", field.getGenericType().toString());
+				// Log.e("liuy", field.getGenericType().toString());
 				if (field.getGenericType().toString().equals("int")) {
 					// Log.e("liuy", "触发了");
 					int val = (Integer) m.invoke(object);
@@ -79,6 +79,67 @@ public class ClassUtil {
 		return list;
 	}
 
+	// 把从数据库取出的数据恢复为实例
+	public static List<Object> changeData2ObjList(List<HashMap<String, Object>> data, Object object) {
+
+		ArrayList<Object> finalList = new ArrayList<>();
+
+		for (int i = 0; i < data.size(); i++) {
+			HashMap<String, Object> dataMap = data.get(i);
+			@SuppressWarnings("rawtypes")
+			// Class c = Class.forName(object.getClass().getName());
+			Class clazz = object.getClass();
+
+			
+//			List<Method> methods = getMothds(clazz, false);
+//
+//			for (Method method : methods) {
+//
+//				Log.w("liuy", "注意!!!!!:"+method.getName());
+//
+//			}
+			
+			
+			
+			
+			
+			try {
+				Log.i("liuy", "进来了1");
+				Object mObj = clazz.newInstance();
+				Field[] fields = clazz.getDeclaredFields();
+				for (Field field : fields) {
+
+					try {
+						Log.i("liuy", "进来了2");
+						Log.w("liuy", "函数名：" + "set" + getMethodName(field.getName())+",数据类型："+mObj.getClass().getName());
+						Method m = (Method) mObj.getClass().getMethod("set" + getMethodName(field.getName()));//XXX,怎么回事？？？？？
+						Object value = dataMap.get(field.getName());
+						m.invoke(mObj, value);
+
+					} catch (NoSuchMethodException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+				}
+				// Log.i("liuy", "实例名："+mObj.getClass().getName());
+
+				// 遍历obj域，依次invok
+
+				finalList.add(mObj);
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		return finalList;
+
+	}
+
 	private static String getMethodName(String fildeName) throws Exception {
 		byte[] items = fildeName.getBytes();
 		items[0] = (byte) ((char) items[0] - 'a' + 'A');
@@ -86,7 +147,7 @@ public class ClassUtil {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static String getObjClassName(Object object) {
+	public static String getObjShortClassName(Object object) {
 		Class clazz = object.getClass();
 		return clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1);
 	}

@@ -1,6 +1,7 @@
 package com.example.databasetest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -87,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
 			HooMsgBean bean2 = new HooMsgBean();
 			bean2.setReceiveId("呵呵呵呵");
 			bean2.setMsgId(1345);
+			bean1.setGroupId(5.77);
 			ArrayList<HooMsgBean> arrayList = new ArrayList<>();
 			arrayList.add(bean1);
 			arrayList.add(bean2);
@@ -105,7 +107,15 @@ public class MainActivity extends ActionBarActivity {
 		case R.id.btn_find:
 			Toast.makeText(this, "查找", Toast.LENGTH_SHORT).show();
 			HooMsgBean bean3 = new HooMsgBean();
-			DBHelper.lookFor(bean3);
+			List<Object> testList = DBHelper.lookFor(bean3);
+
+			// 测试
+			for (int i = 0; i < testList.size(); i++) {
+				HooMsgBean object = (HooMsgBean) testList.get(i);
+//				Log.i("liuy", "进来了");
+
+			}
+
 			break;
 		}
 	}

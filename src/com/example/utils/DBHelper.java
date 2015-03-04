@@ -81,7 +81,7 @@ public class DBHelper {
 		// buffer.append("create table if not exists " + TABLE_NAME + "(" + BLACK_ID + " integer primary key," + BLACK_NUMBER + " text," + BLOCK_SMS + " boolean," + BLOCK_PHONE_CALL + " boolean)");
 
 		// //
-		buffer.append("create table if not exists " + ClassUtil.getObjClassName(object) + "(");
+		buffer.append("create table if not exists " + ClassUtil.getObjShortClassName(object) + "(");
 		for (int i = 0; i < tempNameList.size(); i++) {
 			buffer.append(tempNameList.get(i));
 			buffer.append(" ");
@@ -123,7 +123,7 @@ public class DBHelper {
 		}
 		open();
 
-		String tableName = ClassUtil.getObjClassName(object);// 表名
+		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(object);
 		ArrayList<String> tempNameList = new ArrayList<String>();
 		ArrayList<String> tempTypeList = new ArrayList<String>();
@@ -171,7 +171,7 @@ public class DBHelper {
 
 		for (int i = 0; i < list.size(); i++) {
 
-			String tableName = ClassUtil.getObjClassName(list.get(i));// 表名
+			String tableName = ClassUtil.getObjShortClassName(list.get(i));// 表名
 			List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(list.get(i));
 			ArrayList<String> tempNameList = new ArrayList<String>();
 			ArrayList<String> tempTypeList = new ArrayList<String>();
@@ -216,7 +216,7 @@ public class DBHelper {
 
 	/** 删除表 */
 	public static void delete(Object object) {
-		String tableName = ClassUtil.getObjClassName(object);// 表名
+		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		open();
 		db.delete(tableName, null, null);
 		close();
@@ -224,7 +224,7 @@ public class DBHelper {
 
 	/** 重载以上方法 */
 	public static void delete(Object object, String deleteCondition, String[] deleteArgs) {
-		String tableName = ClassUtil.getObjClassName(object);// 表名
+		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		open();
 		db.delete(tableName, deleteCondition, deleteArgs);
 		close();
@@ -232,8 +232,8 @@ public class DBHelper {
 	}
 
 	/** 查找内容（改） */
-	public static List<HashMap<String, Object>> lookFor(Object object) {
-		String tableName = ClassUtil.getObjClassName(object);// 表名
+	public static List<Object> lookFor(Object object) {
+		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(object);
 		ArrayList<String> tempNameList = new ArrayList<String>();
 		ArrayList<String> tempTypeList = new ArrayList<String>();
@@ -254,9 +254,8 @@ public class DBHelper {
 		List<HashMap<String, Object>> uList = new ArrayList<HashMap<String, Object>>();
 		while (cursor.moveToNext()) {
 
+			HashMap<String, Object> umap = new HashMap<String, Object>();
 			for (int i = 0; i < tempNameList.size(); i++) {
-
-				HashMap<String, Object> umap = new HashMap<String, Object>();
 
 				if (tempTypeList.get(i).equals("smallint")) {
 					Log.w("liuy", "获取到smallint");
@@ -268,7 +267,7 @@ public class DBHelper {
 					Log.w("liuy", "获取到double");
 					umap.put(tempNameList.get(i), cursor.getDouble(cursor.getColumnIndex(tempNameList.get(i))));
 				} else if (tempTypeList.get(i).equals("text")) {
-					Log.w("liuy", "获取到text");
+					Log.w("liuy", "获取到text:"+cursor.getString(cursor.getColumnIndex(tempNameList.get(i)))+",列名："+tempNameList.get(i));///////////////XXX
 					umap.put(tempNameList.get(i), cursor.getString(cursor.getColumnIndex(tempNameList.get(i))));
 				} else if (tempTypeList.get(i).equals("")) {
 					Log.w("liuy", "获取到数组");
@@ -276,16 +275,19 @@ public class DBHelper {
 				} else {
 					Log.w("liuy", "获取到nothing");
 				}
-				uList.add(umap);
 
 			}
+
+			uList.add(umap);
 
 		}
 		cursor.close();
 		close();
 
 		// 类型转换，TODO
-		return uList;// 这个返回值目前是错的，最后要改为List<Object>的形式
+		Log.i("liuy", "数据长度：" + uList.size());
+
+		return ClassUtil.changeData2ObjList(uList, object);
 
 	}
 
