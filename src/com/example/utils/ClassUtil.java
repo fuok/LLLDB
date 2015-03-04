@@ -95,8 +95,8 @@ public class ClassUtil {
 			try {
 				Log.i("liuy", "进来了1");
 				Object mObj = clazz.newInstance();
-				Method[] methods = clazz.getDeclaredMethods();
-
+				Method[] methods = clazz.getDeclaredMethods();//这里说明一下，使用反射函数名列表而不是通过域名拼出函数名在调用的原因是，所有包含输入参数的set类方法，无法用
+															//Method m = (Method) clazz.getMethod("set" + getMethodName(field.getName()))这个方法调用
 				for (Method method : methods) {
 
 					Iterator iter = dataMap.entrySet().iterator();
