@@ -201,7 +201,7 @@ public class DBHelper {
 		Log.w("liuy", Arrays.toString(nameArray));
 
 		open();
-		Cursor cursor = db.query(tableName, nameArray, null, null, null, null, nameArray[0]);// + " desc");
+		Cursor cursor = db.query(tableName, nameArray, null, null, null, null, nameArray[0]);// + " desc");//这里我用了nameArray[0]作标识，但具体作用还没看出来
 		List<HashMap<String, Object>> uList = new ArrayList<HashMap<String, Object>>();
 		while (cursor.moveToNext()) {
 
