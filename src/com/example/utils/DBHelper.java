@@ -165,56 +165,6 @@ public class DBHelper {
 
 	}
 
-	/** 针对ArrayList */
-	private static void insertArray(ArrayList<Object> list) {
-		Log.i(TAG, "db_insert");
-		open();
-
-		for (int i = 0; i < list.size(); i++) {
-
-			String tableName = ClassUtil.getObjShortClassName(list.get(i));// 表名
-			List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(list.get(i));
-			ArrayList<String> tempNameList = new ArrayList<String>();
-			ArrayList<String> tempTypeList = new ArrayList<String>();
-			ArrayList<Object> tempValueList = new ArrayList<Object>();
-			for (HashMap<String, ?> map : fieldList) {
-				String name = (String) map.get("fieldName");
-				tempNameList.add(name);
-				String type = (String) map.get("fieldType");
-				tempTypeList.add(type);
-				Object value = map.get("fieldValue");
-				tempValueList.add(value);
-			}
-
-			ContentValues contentValues = new ContentValues();
-
-			for (int j = 0; j < tempNameList.size(); j++) {
-
-				if (tempTypeList.get(j).equals("smallint")) {
-					contentValues.put(tempNameList.get(j), (Integer) (tempValueList.get(j)));
-				} else if (tempTypeList.get(j).equals("integer")) {
-					contentValues.put(tempNameList.get(j), (Long) (tempValueList.get(j)));
-				} else if (tempTypeList.get(j).equals("double")) {
-					contentValues.put(tempNameList.get(j), (Double) (tempValueList.get(j)));
-				} else if (tempTypeList.get(j).equals("text")) {
-					contentValues.put(tempNameList.get(j), (String) (tempValueList.get(j)));
-				} else if (tempTypeList.get(j).equals("")) {// ArrayList
-					contentValues.put(tempNameList.get(j), (String) (tempValueList.get(j)));
-				} else {
-
-				}
-
-			}
-			long p = db.insert(tableName, null, contentValues);
-			if (p < 0) {
-				Log.w("liuy", "添加失败");
-			}
-		}
-
-		close();
-
-	}
-
 	/** 删除表 */
 	public static void delete(Object object) {
 		String tableName = ClassUtil.getObjShortClassName(object);// 表名
