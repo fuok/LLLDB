@@ -32,6 +32,7 @@ public class DBHelper {
 
 	//
 
+	/** 必须执行此方法，否则没有DB实例，直接崩溃了。同时有建表作用 */
 	public static void iniDB(Context context, Object... object) {
 		new DBHelper(context);
 		for (Object obj : object) {
@@ -267,7 +268,7 @@ public class DBHelper {
 					Log.w("liuy", "获取到double");
 					umap.put(tempNameList.get(i), cursor.getDouble(cursor.getColumnIndex(tempNameList.get(i))));
 				} else if (tempTypeList.get(i).equals("text")) {
-					Log.w("liuy", "获取到text:"+cursor.getString(cursor.getColumnIndex(tempNameList.get(i)))+",列名："+tempNameList.get(i));///////////////XXX
+					Log.w("liuy", "获取到text:" + cursor.getString(cursor.getColumnIndex(tempNameList.get(i))) + ",列名：" + tempNameList.get(i));// /////////////XXX
 					umap.put(tempNameList.get(i), cursor.getString(cursor.getColumnIndex(tempNameList.get(i))));
 				} else if (tempTypeList.get(i).equals("")) {
 					Log.w("liuy", "获取到数组");
@@ -284,7 +285,7 @@ public class DBHelper {
 		cursor.close();
 		close();
 
-		// 类型转换，TODO
+		// 类型转换
 		Log.i("liuy", "数据长度：" + uList.size());
 
 		return ClassUtil.changeData2ObjList(uList, object);

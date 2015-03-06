@@ -95,8 +95,8 @@ public class ClassUtil {
 			try {
 				Log.i("liuy", "进来了1");
 				Object mObj = clazz.newInstance();
-				Method[] methods = clazz.getDeclaredMethods();//这里说明一下，使用反射函数名列表而不是通过域名拼出函数名在调用的原因是，所有包含输入参数的set类方法，无法用
-															//Method m = (Method) clazz.getMethod("set" + getMethodName(field.getName()))这个方法调用
+				Method[] methods = clazz.getDeclaredMethods();// 这里说明一下，使用反射函数名列表而不是通过域名拼出函数名在调用的原因是，所有包含输入参数的set类方法，无法用
+																// Method m = (Method) clazz.getMethod("set" + getMethodName(field.getName()))这个方法调用
 				for (Method method : methods) {
 
 					Iterator iter = dataMap.entrySet().iterator();
@@ -107,8 +107,17 @@ public class ClassUtil {
 
 						try {
 							if (method.getName().contains(("set") + getMethodName(key))) {
-								System.out.println(method.getName() + "哈哈");
+//								System.out.println(method.getName() + "哈哈");
+								if (val instanceof String && val.toString().contains("<java.lang.String>")) {
+									// 之前保存的数据格式应该是：<java.lang.String>[数据1,数据2]
+									String[] str = (val.toString().substring(val.toString().indexOf("[") + 1, val.toString().lastIndexOf("]"))).split(",");
+									ArrayList<String> getList = new ArrayList<String>();
+									for (int j = 0; j < str.length; j++) {
+										getList.add(str[j]);
+									}
+									val = getList;
 
+								}
 								try {
 									method.invoke(mObj, val);
 								} catch (IllegalAccessException e) {
