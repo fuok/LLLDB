@@ -1,7 +1,6 @@
 package com.example.utils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,32 +103,20 @@ public class ClassUtil {
 						String key = entry.getKey().toString();
 						Object val = entry.getValue();
 
-						try {
-							if (method.getName().contains(("set") + getMethodName(key))) {
-//								System.out.println(method.getName() + "哈哈");
-								if (val instanceof String && val.toString().contains("<java.lang.String>")) {
-									// 之前保存的数据格式应该是：<java.lang.String>[数据1,数据2]
-									String[] str = (val.toString().substring(val.toString().indexOf("[") + 1, val.toString().lastIndexOf("]"))).split(",");
-									ArrayList<String> getList = new ArrayList<String>();
-									for (int j = 0; j < str.length; j++) {
-										getList.add(str[j]);
-									}
-									val = getList;
-
+						if (method.getName().contains(("set") + getMethodName(key))) {
+							// System.out.println(method.getName() + "哈哈");
+							if (val instanceof String && val.toString().contains("<java.lang.String>")) {
+								// 之前保存的数据格式应该是：<java.lang.String>[数据1,数据2]
+								String[] str = (val.toString().substring(val.toString().indexOf("[") + 1, val.toString().lastIndexOf("]"))).split(",");
+								ArrayList<String> getList = new ArrayList<String>();
+								for (int j = 0; j < str.length; j++) {
+									getList.add(str[j]);
 								}
-								try {
-									method.invoke(mObj, val);
-								} catch (IllegalAccessException e) {
-									e.printStackTrace();
-								} catch (IllegalArgumentException e) {
-									e.printStackTrace();
-								} catch (InvocationTargetException e) {
-									e.printStackTrace();
-								}
+								val = getList;
 
 							}
-						} catch (Exception e) {
-							e.printStackTrace();
+							method.invoke(mObj, val);
+
 						}
 
 					}
@@ -137,15 +124,28 @@ public class ClassUtil {
 				}
 
 				finalList.add(mObj);
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		}
 
 		return finalList;
+
+	}
+
+	/** 返回一个Object的某一属性值 */
+	public static String getFieldValueByName(Object object, String fieldName) {
+
+		String val = null;
+		try {
+			Method m = (Method) object.getClass().getMethod("get" + getMethodName(fieldName));
+			val = (String) m.invoke(object);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return val;
 
 	}
 

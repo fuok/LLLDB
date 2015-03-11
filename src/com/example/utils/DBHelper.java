@@ -182,7 +182,7 @@ public class DBHelper {
 		// return db.delete(tableName, deleteCondition, deleteArgs) > 0;
 	}
 
-	/** 查找内容（改） */
+	/** 查找内容（新版） */
 	public static List<Object> lookFor(Object object) {
 		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(object);
@@ -243,19 +243,29 @@ public class DBHelper {
 	}
 
 	/** 修改,TODO */
-	public boolean update(String table, ContentValues values, String whereClause, String[] whereArgs) {
-		int returnValue = db.update(table, values, whereClause, whereArgs);
+	public static boolean update(Object object, String whereClause) {
+		String tableName = ClassUtil.getObjShortClassName(object);// 表名
+		// 获取修改的值
+		ContentValues contentValues = new ContentValues();
+		// contentValues.put(BLACK_NUMBER, (String) newValue[0]);
+
+		// update(TABLE_NAME, contentValues, BLACK_ID + "=?", new String[] { oldValue.get(BLACK_ID).toString() });//参考
+
+		open();
+		int returnValue = db.update(tableName, contentValues, whereClause + "=?", new String[] { ClassUtil.getFieldValueByName(object, whereClause) });// 获取whereClause的属性值
+		Log.i("liuy", "修改了");
+		close();
 		return returnValue > 0;
 	}
 
-	/** 查找，7个参数 */
+	/** 查找，7个参数，暂时不用 */
 	public Cursor findList(String tableName, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
 		Cursor cursor = db.query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy);
 		return cursor;
 
 	}
 
-	/** 查找，9个参数 */
+	/** 查找，9个参数，暂时不用 */
 	public Cursor findInfo(boolean distinct, String tableName, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit)
 			throws SQLException {
 		Cursor cursor = db.query(distinct, tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);

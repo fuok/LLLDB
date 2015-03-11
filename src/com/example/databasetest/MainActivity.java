@@ -118,6 +118,12 @@ public class MainActivity extends ActionBarActivity {
 			}
 			Log.i("liuy", "break");
 			break;
+		case R.id.btn_update:
+			Toast.makeText(this, "修改", Toast.LENGTH_SHORT).show();
+			
+			
+			
+			break;
 		}
 	}
 

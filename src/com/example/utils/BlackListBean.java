@@ -3,10 +3,8 @@ package com.example.utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -125,18 +123,17 @@ public class BlackListBean {
 	 *            �޸ĺ�����,������ʽ,����һ��item��Ҫ�޸ĵĸ����������
 	 */
 
-	public final boolean update(final DBHelper dbHelper, Map<String, Object> oldValue, Object[] newValue) {// ���������ɷ�����һ��,�ϱߵ�Add������ֱ�Ӵ���ContentValues,���޸��������Ǵ���������ת��ContentValues
+//	public final boolean update(final DBHelper dbHelper, Map<String, Object> oldValue, Object[] newValue) {// ���������ɷ�����һ��,�ϱߵ�Add������ֱ�Ӵ���ContentValues,���޸��������Ǵ���������ת��ContentValues
 																											// �������ַ����û�Ҫ�ٿ�һ��
 																											// dbHelper.open();
 		// ������ݿ���޸�����
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(BLACK_NUMBER, (String) newValue[0]);
-		contentValues.put(BLOCK_SMS, (Boolean) newValue[1]);
-		contentValues.put(BLOCK_PHONE_CALL, (Boolean) newValue[2]);
-		boolean result = dbHelper.update(TABLE_NAME, contentValues, BLACK_ID + "=?", new String[] { oldValue.get(BLACK_ID)// ��oldValue������Ƭ��������HashMap��,��һ����Ŀ��Ϣ
-				.toString() });
+//		ContentValues contentValues = new ContentValues();
+//		contentValues.put(BLACK_NUMBER, (String) newValue[0]);
+//		contentValues.put(BLOCK_SMS, (Boolean) newValue[1]);
+//		contentValues.put(BLOCK_PHONE_CALL, (Boolean) newValue[2]);
+//		boolean result = dbHelper.update(TABLE_NAME, contentValues, BLACK_ID + "=?", new String[] { oldValue.get(BLACK_ID).toString() });// ��oldValue������Ƭ��������HashMap��,��һ����Ŀ��Ϣ
 		// dbHelper.close();
-		return result;
-
-	}
+//		return result;
+//
+//	}
 }

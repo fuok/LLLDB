@@ -36,4 +36,11 @@
         android:onClick="myClick"
         android:text="读取数据" />
 
+    <Button
+        android:id="@+id/btn_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="myClick"
+        android:text="修改数据" />
+
 </LinearLayout>
