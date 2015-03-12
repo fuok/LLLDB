@@ -134,18 +134,43 @@ public class ClassUtil {
 
 	}
 
-	/** 返回一个Object的某一属性值 */
+	/** 返回一个Object的某一属性值,用于修改数据库，所以返回的必须是String类型 */
 	public static String getFieldValueByName(Object object, String fieldName) {
+		Class clazz = object.getClass();
+		Field fieldd = null;
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getName().equals(fieldName)) {
+				// Log.i("liuy", "找到了");
+				fieldd = field;
+			}
+		}
 
-		String val = null;
+		String str = null;
+
 		try {
 			Method m = (Method) object.getClass().getMethod("get" + getMethodName(fieldName));
-			val = (String) m.invoke(object);
+			if (fieldd.getGenericType().toString().equals("int")) {
+				int val = (Integer) m.invoke(object);
+				str = String.valueOf(val);
+			} else if (fieldd.getGenericType().toString().equals("long")) {
+				long val = (Long) m.invoke(object);
+				str = String.valueOf(val);
+			} else if (fieldd.getGenericType().toString().equals("double")) {
+				double val = (Double) m.invoke(object);
+				str = String.valueOf(val);
+			} else if (fieldd.getGenericType().toString().equals("boolean")) {
+				boolean val = (Boolean) m.invoke(object);
+				str = String.valueOf(val);
+			} else if (fieldd.getGenericType().toString().equals("class java.lang.String")) {
+				String val = (String) m.invoke(object);
+				str = val;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return val;
+		return str;
 
 	}
 

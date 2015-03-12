@@ -32,7 +32,14 @@ public class DBHelper {
 
 	//
 
-	/** 必须执行此方法，否则没有DB实例，直接崩溃了。同时有建表作用 */
+	/**
+	 * 使用数据库前需要执行此方法对数据库实例化。同时有建表作用
+	 * 
+	 * @param context
+	 *            android上下文
+	 * @param object
+	 *            需要保存到数据库的数据类型实体
+	 */
 	public static void iniDB(Context context, Object... object) {
 		new DBHelper(context);
 		for (Object obj : object) {
@@ -114,13 +121,18 @@ public class DBHelper {
 		Log.v(TAG, "db_close");
 	}
 
-	/** 插入表数据 */
+	/**
+	 * 插入表数据
+	 * 
+	 * @param object
+	 *            插入表的对象，可以是单个对象或ArrayList
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	public static void insert(Object object) {
 		Log.i(TAG, "db_insert");
 
 		boolean dataIsArray = object.getClass().getCanonicalName().equals("java.util.ArrayList");// 如果是ArrayList，则需要使用相应方法判断循环插入
-		Log.i("liuy", "是队列：" + dataIsArray);
+		// Log.i("liuy", "是队列：" + dataIsArray);
 		open();
 		for (int i = 0; i < (dataIsArray ? ((ArrayList) object).size() : 1); i++) {
 			String tableName = ClassUtil.getObjShortClassName(dataIsArray ? ((ArrayList) object).get(i) : object);// 表名
@@ -165,7 +177,12 @@ public class DBHelper {
 
 	}
 
-	/** 删除表 */
+	/**
+	 * 删除表
+	 * 
+	 * @param object
+	 *            删除该对象实体对应的数据表
+	 */
 	public static void delete(Object object) {
 		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		open();
@@ -173,7 +190,11 @@ public class DBHelper {
 		close();
 	}
 
-	/** 重载以上方法 */
+	/**
+	 * 删除表，暂不使用
+	 * 
+	 * @deprecated
+	 */
 	public static void delete(Object object, String deleteCondition, String[] deleteArgs) {
 		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		open();
@@ -182,7 +203,13 @@ public class DBHelper {
 		// return db.delete(tableName, deleteCondition, deleteArgs) > 0;
 	}
 
-	/** 查找内容（新版） */
+	/**
+	 * 查找表内容（新版） 根据相应对象实体查找表中内容，查找结果返回为一个ArrayList
+	 * 
+	 * @param object
+	 *            需要查找的表的内容实例
+	 * 
+	 */
 	public static List<Object> lookFor(Object object) {
 		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		List<HashMap<String, ?>> fieldList = ClassUtil.saveObj2List(object);
@@ -218,7 +245,7 @@ public class DBHelper {
 					Log.w("liuy", "获取到double");
 					umap.put(tempNameList.get(i), cursor.getDouble(cursor.getColumnIndex(tempNameList.get(i))));
 				} else if (tempTypeList.get(i).equals("text")) {
-					Log.w("liuy", "获取到text:" + cursor.getString(cursor.getColumnIndex(tempNameList.get(i))) + ",列名：" + tempNameList.get(i));// /////////////XXX
+					// Log.w("liuy", "获取到text:" + cursor.getString(cursor.getColumnIndex(tempNameList.get(i))) + ",列名：" + tempNameList.get(i));// /////////////XXX
 					umap.put(tempNameList.get(i), cursor.getString(cursor.getColumnIndex(tempNameList.get(i))));
 				} else if (tempTypeList.get(i).equals("")) {
 					Log.w("liuy", "获取到数组");
@@ -242,18 +269,27 @@ public class DBHelper {
 
 	}
 
-	/** 修改,TODO */
-	public static boolean update(Object object, String whereClause) {
+	/**
+	 * 修改表内容
+	 * 
+	 * @param object
+	 *            需要修改的表的内容实例
+	 * @param whereClause
+	 *            以该属性名称确定需要修改的具体行
+	 * @param targetClause
+	 *            需要进行修改的属性名称
+	 */
+	public static boolean update(Object object, String whereClause, String targetClause) {
 		String tableName = ClassUtil.getObjShortClassName(object);// 表名
 		// 获取修改的值
 		ContentValues contentValues = new ContentValues();
-		// contentValues.put(BLACK_NUMBER, (String) newValue[0]);
+		contentValues.put(targetClause, ClassUtil.getFieldValueByName(object, targetClause));
 
 		// update(TABLE_NAME, contentValues, BLACK_ID + "=?", new String[] { oldValue.get(BLACK_ID).toString() });//参考
 
 		open();
 		int returnValue = db.update(tableName, contentValues, whereClause + "=?", new String[] { ClassUtil.getFieldValueByName(object, whereClause) });// 获取whereClause的属性值
-		Log.i("liuy", "修改了");
+		// Log.i("liuy", "修改了");
 		close();
 		return returnValue > 0;
 	}

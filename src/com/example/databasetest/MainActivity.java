@@ -120,9 +120,10 @@ public class MainActivity extends ActionBarActivity {
 			break;
 		case R.id.btn_update:
 			Toast.makeText(this, "修改", Toast.LENGTH_SHORT).show();
-			
-			
-			
+			HooMsgBean bean4 = new HooMsgBean();
+			bean4.setMsgId(1345);
+			bean4.setSubject("刘大爷测试");
+			DBHelper.update(bean4, "msgId", "subject");
 			break;
 		}
 	}
