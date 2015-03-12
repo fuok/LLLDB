@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.lll.dbtool;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

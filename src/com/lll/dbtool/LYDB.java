@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.lll.dbtool;
 
 import java.util.ArrayList;
 import java.util.Arrays;

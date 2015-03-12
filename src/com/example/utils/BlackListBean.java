@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.lll.dbtool.LYDB;
+
 import android.database.Cursor;
 import android.util.Log;
 

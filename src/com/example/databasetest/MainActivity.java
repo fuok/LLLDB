@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.model.HooMsgBean;
-import com.example.utils.LYDB;
+import com.lll.dbtool.LYDB;
 
 //呵呵
 public class MainActivity extends ActionBarActivity {
