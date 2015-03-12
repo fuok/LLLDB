@@ -57,7 +57,7 @@ public class BlackListBean {
 	}
 
 	// ��ȡ������ݼ���
-	public final List<HashMap<String, Object>> findList(final DBHelper dbHelper) {
+	public final List<HashMap<String, Object>> findList(final LYDB dbHelper) {
 		// dbHelper.open();
 		Cursor cursor = dbHelper.findList(TABLE_NAME, new String[] { BLACK_ID, BLACK_NUMBER, BLOCK_SMS, BLOCK_PHONE_CALL }, null, null, null, null, BLACK_ID);// + " desc");//����Ҫ��������
 		List<HashMap<String, Object>> uList = new ArrayList<HashMap<String, Object>>();
@@ -75,7 +75,7 @@ public class BlackListBean {
 	}
 
 	/** ����һ������Ƿ���� */
-	public final boolean isRowExist(final DBHelper dbHelper, final String incomeNumber) {
+	public final boolean isRowExist(final LYDB dbHelper, final String incomeNumber) {
 
 		// dbHelper.open();
 		Cursor cursor = dbHelper.findList(TABLE_NAME, new String[] { BLACK_ID, BLACK_NUMBER, BLOCK_SMS, BLOCK_PHONE_CALL }, BLACK_NUMBER + "=?", new String[] { incomeNumber }, null, null, BLACK_ID);// +
@@ -105,7 +105,7 @@ public class BlackListBean {
 	// }
 
 	// ɾ��
-	public final boolean remove(final DBHelper dbHelper, String deleteCondition, HashMap<String, Object> map) {
+	public final boolean remove(final LYDB dbHelper, String deleteCondition, HashMap<String, Object> map) {
 		// dbHelper.open();
 		// boolean result = dbHelper.delete(TABLE_NAME, deleteCondition, new String[] { map.get(BLACK_ID).toString() });// ɾ����߼���,ɾ�����������(deleteArgs)�ض���(deleteCondition)
 		// dbHelper.close();

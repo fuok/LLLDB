@@ -21,14 +21,14 @@ public abstract class UserBean {
 	abstract public String sql$dropTable();
 
 	// ��ȡ������ݼ���
-	abstract public List<HashMap<String, Object>> findList(DBHelper dbHelper);
+	abstract public List<HashMap<String, Object>> findList(LYDB dbHelper);
 
 	// ����
-	abstract public long save(DBHelper dbHelper, ContentValues contentValues);
+	abstract public long save(LYDB dbHelper, ContentValues contentValues);
 
 	// ɾ��
-	abstract public boolean remove(DBHelper dbHelper, String deleteCondition, HashMap<String, Object> map);
+	abstract public boolean remove(LYDB dbHelper, String deleteCondition, HashMap<String, Object> map);
 
 	// �޸�
-	abstract public boolean update(DBHelper dbHelper, Map<String, Object> oldValue, Object[] newValue);
+	abstract public boolean update(LYDB dbHelper, Map<String, Object> oldValue, Object[] newValue);
 }

@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.model.HooMsgBean;
-import com.example.utils.DBHelper;
+import com.example.utils.LYDB;
 
 //呵呵
 public class MainActivity extends ActionBarActivity {
@@ -95,20 +95,20 @@ public class MainActivity extends ActionBarActivity {
 			arrayList.add(bean2);
 			//
 			// ClassUtil.saveObj2List(bean);
-			DBHelper.iniDB(this, bean1);// 必须，可以考虑把bean放这里一起inidth,用可变参数
-			DBHelper.insert(arrayList);
+			LYDB.iniDB(this, bean1);// 必须，可以考虑把bean放这里一起inidth,用可变参数
+			LYDB.insert(arrayList);
 			// DBHelper.createTable(bean);
 			break;
 		case R.id.btn_delete:
 			Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
 			HooMsgBean bean = new HooMsgBean();
-			DBHelper.delete(bean);
+			LYDB.delete(bean);
 
 			break;
 		case R.id.btn_find:
 			Toast.makeText(this, "查找", Toast.LENGTH_SHORT).show();
 			HooMsgBean bean3 = new HooMsgBean();
-			List<Object> testList = DBHelper.lookFor(bean3);
+			List<Object> testList = LYDB.lookFor(bean3);
 
 			// 测试
 			for (int i = 0; i < testList.size(); i++) {
@@ -123,7 +123,7 @@ public class MainActivity extends ActionBarActivity {
 			HooMsgBean bean4 = new HooMsgBean();
 			bean4.setMsgId(1345);
 			bean4.setSubject("刘大爷测试");
-			DBHelper.update(bean4, "msgId", "subject");
+			LYDB.update(bean4, "msgId", "subject");
 			break;
 		}
 	}

@@ -16,7 +16,7 @@ import android.util.Log;
 /*
  * Sqlite3
  * */
-public class DBHelper {
+public class LYDB {
 
 	private final static String TAG = "DBHelper";
 	// DDL
@@ -41,13 +41,13 @@ public class DBHelper {
 	 *            需要保存到数据库的数据类型实体
 	 */
 	public static void iniDB(Context context, Object... object) {
-		new DBHelper(context);
+		new LYDB(context);
 		for (Object obj : object) {
 			createTable(obj);
 		}
 	}
 
-	public DBHelper(Context context) {
+	public LYDB(Context context) {
 		mCtx = context;
 	}
 
