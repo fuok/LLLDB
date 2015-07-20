@@ -1,7 +1,7 @@
 ## How to use
 
 ## creat table&add data
-LYDB.iniDB(Context context, Object... object);
+LYDB.iniDB(Context context, Object... object);  
 LYDB.insert(Object object);
 
 ## delete table
