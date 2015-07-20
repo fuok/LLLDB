@@ -1,14 +1,14 @@
-# How to use
+## How to use
 
-# creat table&add data
+## creat table&add data
 LYDB.iniDB(Context context, Object... object);
 LYDB.insert(Object object);
 
-# delete table
+## delete table
 LYDB.delete(Object object);
 
-# research data
+## research data
 LYDB.lookFor(Object object);
 
-# update data
+## update data
 LYDB.update(Object object, String whereClause, String targetClause);
